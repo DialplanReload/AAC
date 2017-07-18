@@ -15,6 +15,10 @@
 #
 # Execucao simples - ./asteriskActiveCalls.sh
 #
+#
+date=$(date +%d%h%Y_%H:%M)
+directory=(/root/)
+
 is_number() {
     re='^[0-9]+$'
     if ! [[ $1 =~ $re ]]; then
@@ -24,7 +28,7 @@ is_number() {
     echo 1
 }
 
-calls=$(rasterisk -x "core show channels verbose" | grep "active call" | awk '{print $1}' && date)
+calls=$(rasterisk -x "core show channels verbose" | grep "active call" | awk '{print $1}')
 
 if [ -z $calls ]; then
     echo -1
@@ -33,11 +37,10 @@ fi
 
 if [ $(is_number $calls) -gt 0 ]
 then
-    echo $calls
+    echo $calls           $date >> $directory/callsHistory.md
     exit 0
 else
     echo -1
     exit -1
-fi
 
-echo $calls >> callsHistory.md
+fi
