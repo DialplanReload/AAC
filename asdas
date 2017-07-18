@@ -1,0 +1,27 @@
+freitas@Alpha:~$ cat Documentos/Profissional/Opens/Zabbix/Scripts/pabx/1.0/scripts/asterisk.active.calls.sh 
+#!/bin/bash
+
+is_number() {
+    re='^[0-9]+$'
+    if ! [[ $1 =~ $re ]]; then
+        echo 0
+    fi
+
+    echo 1
+}
+
+calls=$(rasterisk -x "core show channels verbose" | grep "active call" | awk '{print $1}' )
+
+if [ -z $calls ]; then
+    echo -1
+    exit -1
+fi
+
+if [ $(is_number $calls) -gt 0 ]
+then
+    echo $calls
+    exit 0
+else
+    echo -1
+    exit -1
+fi
