@@ -15,9 +15,17 @@
 #
 # Execucao simples - ./asteriskActiveCalls.sh
 #
+# Environment Variables
+#
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/
+ast=$(which asterisk)
+awk=$(which awk)
+grep=$(which grep)
+#
+# Custom variables
 #
 date=$(date +%d%h%Y_%H:%M)
-directory=(/root/)
+directory=(/root)
 
 is_number() {
     re='^[0-9]+$'
@@ -28,7 +36,7 @@ is_number() {
     echo 1
 }
 
-calls=$(rasterisk -x "core show channels verbose" | grep "active call" | awk '{print $1}')
+calls=$($ast -rx "core show channels verbose" | $grep "active call" | $awk '{print $1}')
 
 if [ -z $calls ]; then
     echo -1
